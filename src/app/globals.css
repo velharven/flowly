@@ -1,26 +1,269 @@
 @import "tailwindcss";
 
+/* ============================================================
+   OKLCH Design Tokens — "The Motion Brief"
+   Deep ink surface, electric mint primary, ember coral accent.
+   Single sans family (Geist) with size+weight contrast.
+   ============================================================ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Brand palette */
+  --bg:           oklch(0.10 0.005 250);   /* Deep Ink — primary surface */
+  --surface:      oklch(0.13 0.006 250);   /* Ink Elevated — cards, panels */
+  --surface-high: oklch(0.17 0.007 250);   /* Modal/popover lift */
+  --ink:          oklch(0.96 0.005 100);   /* Bone White — body text */
+  --ink-soft:     oklch(0.82 0.006 100);   /* Slightly subdued */
+  --muted:        oklch(0.70 0.012 250);   /* Smoke Gray — secondary */
+  --primary:      oklch(0.78 0.20 140);    /* Electric Mint — primary accent */
+  --primary-deep: oklch(0.62 0.18 140);    /* Mint pressed — hover state */
+  --primary-soft: oklch(0.32 0.06 140);    /* Mint tint — subtle bg */
+  --accent:       oklch(0.68 0.18 50);     /* Ember Coral — signal accent */
+  --accent-deep:  oklch(0.55 0.18 50);     /* Coral pressed */
+  --border:       oklch(0.22 0.008 250);   /* Hairline */
+  --border-strong:oklch(0.30 0.010 250);
+  --grid:         oklch(0.16 0.006 250);   /* Grid line tint */
+
+  /* Typography */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* Motion */
+  --ease-out-expo:  cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+  --duration-fast:  180ms;
+  --duration-base:  420ms;
+  --duration-slow:  800ms;
+  --duration-stage: 1200ms;
+  --stagger-tight:  60ms;
+  --stagger-base:   100ms;
+  --stagger-loose:  180ms;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg:            var(--bg);
+  --color-surface:       var(--surface);
+  --color-surface-high:  var(--surface-high);
+  --color-ink:           var(--ink);
+  --color-ink-soft:      var(--ink-soft);
+  --color-muted:         var(--muted);
+  --color-primary:       var(--primary);
+  --color-primary-deep:  var(--primary-deep);
+  --color-primary-soft:  var(--primary-soft);
+  --color-accent:        var(--accent);
+  --color-accent-deep:   var(--accent-deep);
+  --color-border:        var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-grid:          var(--grid);
+  --font-sans:           var(--font-sans);
+  --font-mono:           var(--font-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ============================================================
+   Base
+   ============================================================ */
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11";
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--primary);
+  color: var(--bg);
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ============================================================
+   Typography utilities
+   ============================================================ */
+
+h1, h2, h3 { text-wrap: balance; }
+p { text-wrap: pretty; }
+
+.display-1 {
+  font-size: clamp(2.75rem, 6.8vw, 5.75rem);
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+  font-weight: 700;
+}
+
+.display-2 {
+  font-size: clamp(2.25rem, 4.6vw, 3.75rem);
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  font-weight: 700;
+}
+
+.display-3 {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  font-weight: 600;
+}
+
+.headline {
+  font-size: clamp(1.25rem, 1.7vw, 1.5rem);
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  font-weight: 600;
+}
+
+.body-lg {
+  font-size: clamp(1.0625rem, 1.2vw, 1.25rem);
+  line-height: 1.55;
+  font-weight: 400;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.eyebrow-sm {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.mono { font-family: var(--font-mono); font-feature-settings: "zero", "ss02"; }
+
+.wordmark {
+  font-family: var(--font-ancola), var(--font-sans);
+  font-weight: 400;
+  letter-spacing: 0.005em;
+  font-feature-settings: "ss01";
+}
+
+.cap { max-width: 65ch; }
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 3rem;
+  padding: 0 1.5rem;
+  border-radius: 999px;
+  font-weight: 500;
+  font-size: 0.9375rem;
+  letter-spacing: -0.005em;
+  transition: background var(--duration-fast) var(--ease-out-quart),
+              color var(--duration-fast) var(--ease-out-quart),
+              transform var(--duration-fast) var(--ease-out-quart),
+              box-shadow var(--duration-fast) var(--ease-out-quart);
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: var(--bg);
+  box-shadow: 0 0 0 0 var(--primary-soft);
+}
+
+.btn-primary:hover {
+  background: var(--ink);
+  box-shadow: 0 0 0 8px oklch(from var(--primary) l c h / 0.18);
+}
+
+.btn-primary:active { transform: translateY(1px); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--border-strong);
+}
+
+.btn-ghost:hover {
+  background: var(--surface);
+  border-color: var(--ink-soft);
+}
+
+/* ============================================================
+   Layout helpers
+   ============================================================ */
+
+.container-page {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+.section-pad {
+  padding-block: clamp(4.5rem, 9vw, 8rem);
+}
+
+.grid-bg {
+  background-image:
+    linear-gradient(to right, var(--grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+  background-size: clamp(40px, 5vw, 64px) clamp(40px, 5vw, 64px);
+  background-position: -1px -1px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 80%);
+}
+
+/* ============================================================
+   Reveal animation primitives
+   ============================================================ */
+
+@keyframes flow-dot {
+  0%   { transform: translateX(-10%) scale(0.8); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateX(110%) scale(1); opacity: 0; }
+}
+
+@keyframes pulse-ring {
+  0%   { transform: scale(0.9);  opacity: 0.6; }
+  80%  { transform: scale(1.6);  opacity: 0; }
+  100% { transform: scale(1.6);  opacity: 0; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+@keyframes blink {
+  50%  { opacity: 0; }
+}
+
+@keyframes drift {
+  0%   { transform: translate3d(0, 0, 0); }
+  50%  { transform: translate3d(0, -4px, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
 }

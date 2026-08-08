@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# debug
+/log
+/log-*
+*.log
+!src/app/fonts/iFonts-License.txt
