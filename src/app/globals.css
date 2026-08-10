@@ -14,9 +14,9 @@
   --ink:          oklch(0.96 0.005 100);   /* Bone White — body text */
   --ink-soft:     oklch(0.82 0.006 100);   /* Slightly subdued */
   --muted:        oklch(0.70 0.012 250);   /* Smoke Gray — secondary */
-  --primary:      oklch(0.78 0.20 140);    /* Electric Mint — primary accent */
-  --primary-deep: oklch(0.62 0.18 140);    /* Mint pressed — hover state */
-  --primary-soft: oklch(0.32 0.06 140);    /* Mint tint — subtle bg */
+  --primary:      oklch(0.70 0.20 140);    /* Electric Mint — primary accent */
+  --primary-deep: oklch(0.56 0.18 140);    /* Mint pressed — hover state */
+  --primary-soft: oklch(0.28 0.06 140);    /* Mint tint — subtle bg */
   --accent:       oklch(0.68 0.18 50);     /* Ember Coral — signal accent */
   --accent-deep:  oklch(0.55 0.18 50);     /* Coral pressed */
   --border:       oklch(0.22 0.008 250);   /* Hairline */
@@ -102,7 +102,7 @@ p { text-wrap: pretty; }
 .display-1 {
   font-size: clamp(2.75rem, 6.8vw, 5.75rem);
   line-height: 0.95;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.04em;
   font-weight: 700;
 }
 
@@ -196,6 +196,29 @@ p { text-wrap: pretty; }
 
 .btn-primary:active { transform: translateY(1px); }
 
+.btn-primary--white {
+  color: var(--ink);
+}
+
+.btn-primary--white:hover {
+  background: var(--primary-deep);
+  color: var(--ink);
+  box-shadow: 0 0 0 0 transparent;
+}
+
+.btn-dark {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.btn-dark:hover {
+  background: var(--ink);
+  color: var(--bg);
+  box-shadow: 0 0 0 0 transparent;
+}
+
+.btn-dark:active { transform: translateY(1px); }
+
 .btn-ghost {
   background: transparent;
   color: var(--ink);
@@ -266,4 +289,19 @@ p { text-wrap: pretty; }
 
 @keyframes spin-slow {
   to { transform: rotate(360deg); }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 22s linear infinite;
+}
+
+.marquee-track--reverse {
+  animation-direction: reverse;
 }

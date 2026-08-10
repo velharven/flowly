@@ -3,7 +3,11 @@
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
 import { WordReveal, MaskReveal, Reveal } from "./reveal";
-import { MockWorkflow } from "./mock-workflow";
+
+const TICKER_LIGHT =
+  "WORKFLOW AUTOMATION · TRIGGER → ACTION → RESULT · OBSERVABLE · RELIABLE · ";
+const TICKER_DARK =
+  "ZAP · HOOK · LOOP · RETRY · LOG · REPLAY · BRANCH · SCHEDULE · ";
 
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
@@ -19,16 +23,15 @@ export function Hero() {
     <section
       ref={ref}
       id="top"
-      className="relative pt-32 sm:pt-40 pb-16 sm:pb-24"
+      className="relative pt-24 sm:pt-28 pb-16 sm:pb-24 bg-primary text-bg overflow-hidden"
     >
-      {/* Grid bg + radial glow */}
-      <div aria-hidden className="absolute inset-0 -z-10 grid-bg" />
+      {/* Subtle white radial glow on green bg */}
       <div
         aria-hidden
         className="absolute -top-40 left-1/2 -translate-x-1/2 -z-10 h-[36rem] w-[72rem] max-w-[180vw] pointer-events-none"
         style={{
           background:
-            "radial-gradient(60% 50% at 50% 0%, oklch(from var(--primary) l c h / 0.14) 0%, transparent 60%)",
+            "radial-gradient(60% 50% at 50% 0%, oklch(0.96 0.005 100 / 0.20) 0%, transparent 60%)",
         }}
       />
 
@@ -37,36 +40,38 @@ export function Hero() {
           <Reveal>
             <div className="flex items-center gap-3 mb-8">
               <span className="relative inline-flex h-1.5 w-1.5">
+                <span className="sr-only">Status indicator:</span>
                 <span
                   aria-hidden
-                  className="absolute inset-0 rounded-full bg-primary"
+                  className="absolute inset-0 rounded-full bg-bg"
                   style={{
                     animation:
                       "pulse-ring 2.4s var(--ease-out-quart) infinite",
                   }}
                 />
-                <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-primary" />
+                <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-bg" />
               </span>
-              <span className="eyebrow text-primary">
-                Flowly · v0.4 in private beta
+              <span className="eyebrow text-bg/80">
+                Flowly · in private beta
               </span>
             </div>
           </Reveal>
 
           <motion.div style={{ y: yHeadline }}>
-            <h1 className="display-1 text-ink">
-              <WordReveal
-                text="Workflows that"
-                delay={0.15}
-                stagger={0.07}
-                duration={0.85}
-                amount={0.2}
-              />
-              <br />
-              <span className="text-ink-soft">
+            <h1 className="display-1">
+              <span className="text-bg">
+                <WordReveal
+                  text="Workflows that"
+                  delay={0.10}
+                  stagger={0.07}
+                  duration={0.85}
+                  amount={0.2}
+                />
+              </span>
+              <span className="block text-bg/70">
                 <WordReveal
                   text="run themselves."
-                  delay={0.45}
+                  delay={0.30}
                   stagger={0.07}
                   duration={0.85}
                   amount={0.2}
@@ -76,8 +81,8 @@ export function Hero() {
           </motion.div>
 
           <div className="mt-8 max-w-2xl">
-            <MaskReveal delay={0.85} amount={0.2}>
-              <p className="body-lg text-ink-soft">
+            <MaskReveal delay={0.55} amount={0.2}>
+              <p className="body-lg text-bg/85">
                 Flowly turns the manual glue between your SaaS into reliable,
                 observable workflows. Set a trigger. Define the steps. Watch it
                 run — and never type that boring middle bit again.
@@ -85,9 +90,10 @@ export function Hero() {
             </MaskReveal>
           </div>
 
-          <Reveal delay={1.05} y={12} duration={0.7} amount={0.2}>
+          <Reveal delay={0.70} y={12} duration={0.7} amount={0.2}>
             <div className="mt-10 flex flex-wrap items-center gap-3">
-              <a href="#cta" className="btn btn-primary">
+              {/* Black CTA with arrow — primary action in hero */}
+              <a href="#cta" className="btn btn-dark">
                 Lihat source
                 <svg
                   width="14"
@@ -105,7 +111,11 @@ export function Hero() {
                   />
                 </svg>
               </a>
-              <a href="#how" className="btn btn-ghost">
+              {/* Ghost CTA — dark border + dark text on green bg */}
+              <a
+                href="#how"
+                className="btn bg-transparent text-bg border border-bg/40 hover:bg-bg/10 hover:border-bg/70"
+              >
                 <svg
                   width="14"
                   height="14"
@@ -127,29 +137,56 @@ export function Hero() {
                 </svg>
                 See how it works
               </a>
-              <span className="mono text-xs text-muted hidden sm:inline ml-1">
+              <span className="mono text-xs text-bg/60 hidden sm:inline ml-1">
                 · 2 min read
               </span>
             </div>
           </Reveal>
         </div>
 
-        <Reveal delay={1.25} y={32} duration={1.0} amount={0.1}>
+        <Reveal delay={0.85} y={32} duration={1.0} amount={0.1}>
           <motion.div
             style={{
               y: yMock,
               opacity: opacityMock,
             }}
-            className="mt-16 sm:mt-20"
+            className="mt-16 sm:mt-20 overflow-hidden rounded-xl"
           >
-            <MockWorkflow />
-            <p className="mt-4 mono text-xs text-muted text-center sm:text-left">
-              ↑ a real-shaped workflow: trigger → action → result. Lights move on
-              their own; you only describe the shape.
-            </p>
+            <Ticker />
           </motion.div>
         </Reveal>
       </div>
     </section>
+  );
+}
+
+/* ============================================================
+   Ticker — dua garis: putih + hitam, teks berjalan (marquee)
+   ============================================================ */
+
+function Ticker() {
+  return (
+    <div aria-hidden className="rounded-xl overflow-hidden border border-bg/20">
+      <div className="bg-ink text-bg overflow-hidden">
+        <div className="marquee-track py-3 sm:py-4">
+          <TickerSpan text={TICKER_LIGHT} />
+          <TickerSpan text={TICKER_LIGHT} />
+        </div>
+      </div>
+      <div className="bg-bg text-ink overflow-hidden">
+        <div className="marquee-track marquee-track--reverse py-3 sm:py-4">
+          <TickerSpan text={TICKER_DARK} />
+          <TickerSpan text={TICKER_DARK} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TickerSpan({ text }: { text: string }) {
+  return (
+    <span className="shrink-0 mono text-sm sm:text-base font-medium uppercase tracking-[0.18em] px-4">
+      {text}
+    </span>
   );
 }
