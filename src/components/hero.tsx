@@ -16,7 +16,7 @@ export function Hero() {
     <section
       ref={ref}
       id="top"
-      className="relative pt-24 sm:pt-28 pb-16 sm:pb-24 bg-primary text-bg overflow-hidden"
+      className="relative min-h-svh flex flex-col justify-center py-16 sm:py-24 bg-primary text-bg overflow-hidden"
     >
       {/* Subtle white radial glow on green bg */}
       <div
