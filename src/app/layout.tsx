@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   title: "Flowly — Automate the work between your tools",
   description:
     "Flowly turns the manual glue between your SaaS into reliable, observable workflows. Built as a portfolio piece — the product is fictional, the code is real.",
-  metadataBase: new URL("https://velharven.github.io/flowly-landing/"),
+  metadataBase: new URL("https://velharven.github.io/flowly/"),
   openGraph: {
     title: "Flowly — Automate the work between your tools",
     description:

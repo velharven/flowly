@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const isProd = process.env.NODE_ENV === "production";
-const basePath = isProd ? "/flowly-landing" : "";
+const basePath = isProd ? "/flowly" : "";
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
