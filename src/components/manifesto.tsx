@@ -46,15 +46,17 @@ export function Manifesto() {
       <section
         ref={ref}
         id="manifesto"
-        className="relative border-t border-border"
+        className="relative"
         style={{ minHeight: "400vh" }}
       >
-        <div className="sticky top-0 h-screen flex items-center overflow-hidden">
+        <div className="sticky top-0 h-screen flex items-center overflow-hidden pb-12 sm:pb-16">
+          <WaveField progress={scrollYProgress} position="top" />
+          <WaveField progress={scrollYProgress} position="bottom" />
           <div className="container-page w-full">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 lg:gap-16">
               <div className="lg:col-span-3">
                 <span className="eyebrow text-muted">/ 01 — manifesto</span>
-                <p className="body-lg text-ink-soft mt-4 max-w-sm">
+                <p className="body-lg text-ink-soft mt-3 sm:mt-4 max-w-sm">
                   Four sentences. The reason this product exists.
                 </p>
               </div>
@@ -65,7 +67,7 @@ export function Manifesto() {
                   (col-start-1 row-start-1). They share the same visual position
                   and replace each other via opacity + y transforms.
                 */}
-                <div className="display-2 text-ink grid">
+                <div className="manifesto-sentences text-ink grid">
                   {sentences.map((s, i) => (
                     <PinnedSentence
                       key={i}
@@ -193,5 +195,63 @@ function PinnedWord({
       {word}
       {isLast ? "" : "\u00A0"}
     </motion.span>
+  );
+}
+
+/* ============================================================
+   WaveField — 3 garis putih melengkung yang muncul dari kanan
+   ke kiri mengikuti scrollYProgress (kanan anchored, kiri tumbuh).
+   Dua instance: top & bottom dari pinned manifesto.
+   ============================================================ */
+
+const WAVE_PATHS = [
+  "M0 8 Q100 0 200 8 T400 8 T600 8 T800 8 T1000 8 T1200 8",
+  "M0 15 Q100 7 200 15 T400 15 T600 15 T800 15 T1000 15 T1200 15",
+  "M0 22 Q100 14 200 22 T400 22 T600 22 T800 22 T1000 22 T1200 22",
+];
+
+function WaveField({
+  progress,
+  position,
+}: {
+  progress: MotionValue<number>;
+  position: "top" | "bottom";
+}) {
+  const reveals = [
+    useTransform(progress, [0.0, 0.45], ["inset(0 0 0 100%)", "inset(0 0 0 0%)"]),
+    useTransform(progress, [0.15, 0.65], ["inset(0 0 0 100%)", "inset(0 0 0 0%)"]),
+    useTransform(progress, [0.3, 0.85], ["inset(0 0 0 100%)", "inset(0 0 0 0%)"]),
+  ];
+
+  return (
+    <div
+      aria-hidden
+      className={`pointer-events-none absolute inset-x-0 ${
+        position === "top"
+          ? "top-20 sm:top-24"
+          : "bottom-10 sm:bottom-14"
+      }`}
+    >
+      <svg
+        viewBox="0 0 1200 30"
+        preserveAspectRatio="none"
+        fill="none"
+        className="h-8 sm:h-10 w-full"
+      >
+        {WAVE_PATHS.map((d, i) => (
+          <motion.path
+            key={i}
+            d={d}
+            stroke="var(--ink)"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            style={{
+              clipPath: reveals[i],
+              opacity: 0.7 - i * 0.15,
+            }}
+          />
+        ))}
+      </svg>
+    </div>
   );
 }

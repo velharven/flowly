@@ -4,19 +4,12 @@ import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
 import { WordReveal, MaskReveal, Reveal } from "./reveal";
 
-const TICKER_LIGHT =
-  "WORKFLOW AUTOMATION · TRIGGER → ACTION → RESULT · OBSERVABLE · RELIABLE · ";
-const TICKER_DARK =
-  "ZAP · HOOK · LOOP · RETRY · LOG · REPLAY · BRANCH · SCHEDULE · ";
-
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
   });
-  const yMock = useTransform(scrollYProgress, [0, 1], [0, 80]);
-  const opacityMock = useTransform(scrollYProgress, [0, 0.6], [1, 0.2]);
   const yHeadline = useTransform(scrollYProgress, [0, 1], [0, -40]);
 
   return (
@@ -32,6 +25,16 @@ export function Hero() {
         style={{
           background:
             "radial-gradient(60% 50% at 50% 0%, oklch(0.96 0.005 100 / 0.20) 0%, transparent 60%)",
+        }}
+      />
+
+      {/* Green → black gradient at the boundary with the manifesto */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-14 sm:h-20"
+        style={{
+          background:
+            "linear-gradient(to bottom in oklch, oklch(from var(--primary) l c h / 0) 0%, oklch(from var(--primary) l c h / 0.16) 28%, oklch(from var(--primary) l c h / 0.30) 52%, oklch(from var(--primary) l c h / 0.18) 74%, var(--bg) 100%)",
         }}
       />
 
@@ -143,50 +146,7 @@ export function Hero() {
             </div>
           </Reveal>
         </div>
-
-        <Reveal delay={0.85} y={32} duration={1.0} amount={0.1}>
-          <motion.div
-            style={{
-              y: yMock,
-              opacity: opacityMock,
-            }}
-            className="mt-16 sm:mt-20 overflow-hidden rounded-xl"
-          >
-            <Ticker />
-          </motion.div>
-        </Reveal>
       </div>
     </section>
-  );
-}
-
-/* ============================================================
-   Ticker — dua garis: putih + hitam, teks berjalan (marquee)
-   ============================================================ */
-
-function Ticker() {
-  return (
-    <div aria-hidden className="rounded-xl overflow-hidden border border-bg/20">
-      <div className="bg-ink text-bg overflow-hidden">
-        <div className="marquee-track py-3 sm:py-4">
-          <TickerSpan text={TICKER_LIGHT} />
-          <TickerSpan text={TICKER_LIGHT} />
-        </div>
-      </div>
-      <div className="bg-bg text-ink overflow-hidden">
-        <div className="marquee-track marquee-track--reverse py-3 sm:py-4">
-          <TickerSpan text={TICKER_DARK} />
-          <TickerSpan text={TICKER_DARK} />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function TickerSpan({ text }: { text: string }) {
-  return (
-    <span className="shrink-0 mono text-sm sm:text-base font-medium uppercase tracking-[0.18em] px-4">
-      {text}
-    </span>
   );
 }
